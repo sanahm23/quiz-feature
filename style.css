@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: rgb(252, 237, 222);
+  
+  }
+  
+  .container {
+    display: inline-flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.751);
+    width: 50%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 20px;
+    box-shadow: 5px 10px #888888;
+  }
+  
+  
+  form input {
+    display: inline-flex;
+    font-family: "Roboto", sans-serif;
+    border: 2px solid black;
+    background: #d1cbcb;
+    width: 90%;
+    border: 0;
+    margin: 10px 10px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  
+  button#btn {
+    background-color: #aa042e;
+    color: white;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+  
+  }
+  
+  h1 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 40px;
+  }
+  
+  #question {
+    text-align: center;
+    font-size: 30px;
+    padding: none;
+  
+  }
+  
+  #choices li {
+    list-style: none;
+    font-size: 25px;
+    display: flex;
+    margin: 30px;
+    background-color: rgb(176, 193, 248);
+    width: auto;
+    padding: 10px;
+    border: 2px solid black;
+  }
+  
+  button {
+  
+    border-radius: 4px;
+    background-color: #f53900;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  button:hover {
+    background-color: rgb(242, 127, 95);
+  }
