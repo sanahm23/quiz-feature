@@ -52,12 +52,23 @@ function startQuiz() {
     document.getElementById('box').style.display = 'none';
     document.getElementById('boxquiz').style.display = 'block';
     showQuestion(currentQuestionIndex);
-    if(user.username >= 2){
+    if (user.username >= 2) {
         alert('session time out')
         localStorage.clear()
         window.close()
     }
     validateEmail(emailInput)
+
+    for (let i = 0; i < localStorage.length; i++) {
+        let email = JSON.parse(localStorage.getItem());
+        // let email = emailInput.value;
+        if (email == localStorage.key(i)) {
+            let a = localStorage.getItem(user.email)
+
+            quiz.innerHTML = `<h2>You answered ${a} out of ${quizData.length} correctly!!</h2>
+        <button onclick = "location.reload()">Reload</button>`;
+        }
+    }
 
 }
 function validateEmail(emailInput) {
@@ -146,9 +157,9 @@ function showPreviousQuestion() {
         currentQuestionIndex--;
         showQuestion(currentQuestionIndex);
     }
-    //  inputElement.disabled = true;
 }
 prev.addEventListener("click", showPreviousQuestion)
+
 function submitQuiz() {
     let selectedOption = document.querySelector('input[name="option"]:checked');
 
@@ -161,7 +172,6 @@ function submitQuiz() {
     let selectedOptionIndex = parseInt(selectedOption.value);
 
     selectedOptions[questionIndex] = selectedOptionIndex;
-    // console.log(selectedOptionIndex)
 
     if (currentQuestionIndex === quizData.length - 1) {
         document.getElementById('boxquiz').style.display = 'none';
@@ -197,16 +207,17 @@ function calculateScore() {
 
 
 function displayTotalScore() {
-    const totalScore = calculateScore();
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    const userScore = { username: savedUser.username, score: totalScore };
+    let totalScore = calculateScore();
+    let savedUser = JSON.parse(localStorage.getItem('user'));
+    let userScore = { email: savedUser.email, score: totalScore };
 
     // Check if the user's score is already present in the array
-    const existingUserScoreIndex = userScores.findIndex((score) => score.username === userScore.username);
-    
+    let existingUserScoreIndex = userScores.findIndex((score) => score.email === userScore.email);
+
     if (existingUserScoreIndex !== -1) {
         // Update the user's score if already present in the array
         userScores[existingUserScoreIndex] = userScore;
+        // displayScores();
     } else {
         // Add the user's score to the array if not present
         userScores.push(userScore);
@@ -214,13 +225,13 @@ function displayTotalScore() {
 
     localStorage.setItem('userScores', JSON.stringify(userScores));
 
-    const scoreElement = document.getElementById('totalScore');
+    let scoreElement = document.getElementById('totalScore');
     scoreElement.textContent = `Total Score: ${totalScore}`;
     displayScores();
 }
 
 function displayScores() {
-    const scoreTable = document.getElementById('scoreTable');
+    let scoreTable = document.getElementById('scoreTable');
 
     // Clear any previous rows in the table except for the header
     while (scoreTable.rows.length > 1) {
@@ -230,10 +241,10 @@ function displayScores() {
     // Add rows for each user's score
     userScores.forEach((userScore) => {
         const newRow = scoreTable.insertRow(-1);
-        const usernameCell = newRow.insertCell(0);
+        const emailCell = newRow.insertCell(0);
         const scoreCell = newRow.insertCell(1);
 
-        usernameCell.textContent = userScore.username;
+        emailCell.textContent = userScore.email;
         scoreCell.textContent = userScore.score;
     });
 }
