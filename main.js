@@ -56,14 +56,14 @@ let user = {
       }
     }
   
-    let username = usernameInput.value;
+  
    
     userDisplay.textContent = username;
     box.style.display = "none";
     boxQuiz.style.display = "block";
   });
   
-  
+  let username = usernameInput.value;
   let submit = document.getElementById('submit')
   function loadQuestion() {
     let questionElement = document.getElementById("question");
@@ -109,7 +109,7 @@ let user = {
   
   
     if(currentQuestion===questions.length){
-      displayTotalScore();
+      // displayTotalScore();
       calculateScore();
     }else{
       loadQuestion();

@@ -52,7 +52,7 @@ body {
   
   }
   
-  #choices li {
+  #options li {
     list-style: none;
     font-size: 25px;
     display: flex;
@@ -80,4 +80,8 @@ body {
   
   button:hover {
     background-color: rgb(242, 127, 95);
+  }
+
+  #boxquiz{
+    display: none;
   }
