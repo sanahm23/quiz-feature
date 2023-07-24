@@ -98,7 +98,7 @@ function showQuestion(questionIndex) {
     }
 
     questionElement.textContent = questionData.question;
-    optionsElement.innerHTML = ''; //for choices
+    optionsElement.innerHTML = '';
 
     questionData.options.forEach((option, index) => {
         let optionElement = document.createElement('div');
@@ -107,8 +107,8 @@ function showQuestion(questionIndex) {
         let inputElement = document.createElement('input');
         inputElement.type = 'radio';
         inputElement.name = 'option';
-        inputElement.value = index; //0,1,2,3 
-        inputElement.id = `option${index}`; //option1, option2, option3... 
+        inputElement.value = index;
+        inputElement.id = `option${index}`;
 
         let labelElement = document.createElement('label');
         labelElement.textContent = option;
@@ -118,7 +118,7 @@ function showQuestion(questionIndex) {
         optionElement.appendChild(labelElement);
 
         if (selectedOptions[questionIndex] !== undefined && selectedOptions[questionIndex] === index) {
-            inputElement.checked = true; // Mark the previously selected option
+            inputElement.checked = true;
         }
 
         inputElement.addEventListener('change', () => {
@@ -173,23 +173,21 @@ function submitQuiz() {
         alert('Please select an option.');
         return;
     }
-
     let questionIndex = currentQuestionIndex;
     let selectedOptionIndex = parseInt(selectedOption.value);
     selectedOptions[questionIndex] = selectedOptionIndex;
     if (currentQuestionIndex === quizData.length - 1) {
         document.getElementById('boxquiz').style.display = 'none';
         document.getElementById('scorePage').style.display = 'block';
-        
+
     } else {
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
     }
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const userEmail = currentUser.email;
-    const userEmailString = userEmail.toString(); // Convert email to string
+    const userEmailString = userEmail.toString();
     const score = calculateScore(selectedOptions);
-    // User is new, add the user to userScores
     userScores[userEmailString] = { username: currentUser.username, scores: [score], totalScore: null };
 
     const totalScore = calculateScore(userScores[userEmailString].scores);
@@ -210,18 +208,17 @@ function shuffleQuestions() {
 }
 shuffleQuestions();
 
-
 function calculateScore() {
-  let score = 0;
+    let score = 0;
 
-  quizData.forEach((questionData, index) => {
-    const selectedOption = selectedOptions[index];
-    if (selectedOption === questionData.answer) {
-      score++;
-    }
-  });
+    quizData.forEach((questionData, index) => {
+        const selectedOption = selectedOptions[index];
+        if (selectedOption === questionData.answer) {
+            score++;
+        }
+    });
 
-  return score;
+    return score;
 }
 
 
@@ -241,16 +238,11 @@ function displayScores() {
         const emailCell = newRow.insertCell(0);
         const usernameCell = newRow.insertCell(1);
         const totalScoreCell = newRow.insertCell(2);
-
         emailCell.textContent = userEmail;
         usernameCell.textContent = userData.username;
-        
-        // Display total score for each user
         totalScoreCell.textContent = userData.totalScore;
     }
 }
-
-
 
 const reloadButton = document.createElement('button');
 reloadButton.textContent = 'Reload';
