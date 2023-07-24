@@ -12,7 +12,8 @@ let email = document.getElementById('email');
 let questionElement = document.getElementById('question');
 let optionsElement = document.getElementById('options');
 let prev = document.getElementById("prevB");
-let loginBtn = document.getElementById("loginbtn")
+let loginBtn = document.getElementById("loginbtn");
+let userDisplay = document.getElementById('userDisplay')
 
 let quizData = [
     {
@@ -38,88 +39,56 @@ let quizData = [
 ];
 
 function startQuiz() {
-    // const currentUser = JSON.parse(localStorage.getItem('user'));
-
-    if (usernameInput.value.trim() === '' || email.value.trim() === '') {
+    if (usernameInput.value === '' || email.value === '') {
         alert('Please provide both username and email.');
         return;
     }
     if (usernameInput)
-    user.username = usernameInput.value.trim();
-    user.email = email.value.trim();
-    // if (validateEmail(email)) {
-    //     localStorage.setItem('userEmail', email);
-    //     showQuestion()
-    // }
-    // else{
-    //     alert('enter valid email')
-    //     location.reload()
-    // }
+        user.username = usernameInput.value;
+    user.email = email.value;
+    userDisplay.textContent = usernameInput.value;
+
+
+    const emailInput = email.value.trim();
+    const emailPattern = /^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/;
+
+    if (!emailPattern.test(emailInput)) {
+        alert('Please enter a valid email');
+        email.value = '';
+        email.focus();
+        return;
+    }
     localStorage.setItem('user', JSON.stringify(user));
     const userEmail = user.email
- if (Object.keys(userScores).length > maxUserCount) {
-    alert('max user login limit reached.')
-      localStorage.clear();
-      location.reload()
- }
-if(userScores.hasOwnProperty(userEmail)&& userScores[userEmail].scores.length > 0){
-    document.getElementById('box').style.display = 'none';
-    document.getElementById('boxquiz').style.display = 'none';
-    document.getElementById('scorePage').style.display= 'block';
-    displayScores();
-}else{
-    document.getElementById('box').style.display = 'none';
-    document.getElementById('boxquiz').style.display = 'block';
-    document.getElementById('scorePage').style.display= 'none';
-    showQuestion(currentQuestionIndex);
-}
+    if (Object.keys(userScores).length > maxUserCount) {
+        alert('max user login limit reached.')
+        localStorage.clear();
+        location.reload()
+    }
+    if (userScores.hasOwnProperty(userEmail) && userScores[userEmail].scores.length > 0) {
+        document.getElementById('box').style.display = 'none';
+        document.getElementById('boxquiz').style.display = 'none';
+        document.getElementById('scorePage').style.display = 'block';
+        displayScores();
+    } else {
+
+        document.getElementById('box').style.display = 'none';
+        document.getElementById('boxquiz').style.display = 'block';
+        document.getElementById('scorePage').style.display = 'none';
+        showQuestion(currentQuestionIndex);
+    }
 
 }
-// }
-// function startQuiz() {
-//     const currentUser = JSON.parse(localStorage.getItem('user'));
-  
-//     if (!currentUser || !currentUser.email) {
-//       // User is new or email not found in localStorage, show the login page
-//       document.getElementById('box').style.display = 'block';
-//       document.getElementById('boxquiz').style.display = 'none';
-//       document.getElementById('scorePage').style.display = 'none';
-//       return;
-//     }
-  
-//     const userEmail = currentUser.email;
-//     const userEmailString = userEmail.toString(); // Convert email to string
-  
-//     if (userScores.hasOwnProperty(userEmailString) && userScores[userEmailString].scores.length > 0) {
-//       // Existing user with completed quiz, show the score page
-//       document.getElementById('box').style.display = 'none';
-//       document.getElementById('boxquiz').style.display = 'none';
-//       document.getElementById('scorePage').style.display = 'block';
-//       displayScores(); // Show the table with total scores
-//     } else {
-//       // New user or existing user with incomplete quiz, show the quiz page
-//       document.getElementById('box').style.display = 'none';
-//       document.getElementById('boxquiz').style.display = 'block';
-//       document.getElementById('scorePage').style.display = 'none';
-//       currentQuestionIndex = 0;
-//       showQuestion(currentQuestionIndex);
-//     }
-//   }
-  
-  
+
 function validateEmail(email) {
     var regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     return regex.test(email);
 }
 
-
-
-
 function showQuestion(questionIndex) {
 
     let questionData = quizData[questionIndex];
-    // console.log(questionIndex)
-    // localStorage.setItem(questionIndex)
+
     if (questionIndex == 0) {
         prev.style.display = "none"
 
@@ -150,7 +119,6 @@ function showQuestion(questionIndex) {
 
         if (selectedOptions[questionIndex] !== undefined && selectedOptions[questionIndex] === index) {
             inputElement.checked = true; // Mark the previously selected option
-            // inputElement.disabled = true;
         }
 
         inputElement.addEventListener('change', () => {
@@ -207,33 +175,29 @@ function submitQuiz() {
     }
 
     let questionIndex = currentQuestionIndex;
-    let selectedOptionIndex = parseInt(selectedOption.value,10);
-
+    let selectedOptionIndex = parseInt(selectedOption.value);
     selectedOptions[questionIndex] = selectedOptionIndex;
-
     if (currentQuestionIndex === quizData.length - 1) {
         document.getElementById('boxquiz').style.display = 'none';
         document.getElementById('scorePage').style.display = 'block';
-        displayScores();
+        
     } else {
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
     }
-
-  const currentUser = JSON.parse(localStorage.getItem('user'));
-  const userEmail = currentUser.email;
-  const userEmailString = userEmail.toString(); // Convert email to string
-
-  const score = calculateScore(selectedOptions);
-
- 
+    const currentUser = JSON.parse(localStorage.getItem('user'));
+    const userEmail = currentUser.email;
+    const userEmailString = userEmail.toString(); // Convert email to string
+    const score = calculateScore(selectedOptions);
     // User is new, add the user to userScores
     userScores[userEmailString] = { username: currentUser.username, scores: [score], totalScore: null };
-  
-    const totalScore = calculateScore(userScores[userEmailString].scores);
-  userScores[userEmailString].totalScore = totalScore;
 
-  localStorage.setItem('userScores', JSON.stringify(userScores));
+    const totalScore = calculateScore(userScores[userEmailString].scores);
+    userScores[userEmailString].totalScore = totalScore;
+
+    localStorage.setItem('userScores', JSON.stringify(userScores));
+    displayScores();
+
 }
 quizForm.addEventListener("click", submitQuiz)
 function shuffleQuestions() {
@@ -248,40 +212,18 @@ shuffleQuestions();
 
 
 function calculateScore() {
-    let score = 0;
+  let score = 0;
 
-    quizData.forEach((questionData, index) => {
-        if (selectedOptions[index] === questionData.answer) {
-            score++;
-        }
-    });
-    return score;
+  quizData.forEach((questionData, index) => {
+    const selectedOption = selectedOptions[index];
+    if (selectedOption === questionData.answer) {
+      score++;
+    }
+  });
+
+  return score;
 }
 
-
-// function displayTotalScore() {
-//     let totalScore = calculateScore();
-//     let savedUser = JSON.parse(localStorage.getItem('user'));
-//     let userScore = { email: savedUser.email, score: totalScore, username: savedUser.username };
-
-//     // Check if the user's score is already present in the array
-//     let existingUserScoreIndex = userScores.findIndex((score) => score.email === userScore.email);
-
-//     if (existingUserScoreIndex !== -1) {
-//         // Update the user's score if already present in the array
-//         userScores[existingUserScoreIndex] = userScore;
-//         // displayScores();
-//     } else {
-//         // Add the user's score to the array if not present
-//         userScores.push(userScore);
-//     }
-
-//     localStorage.setItem('userScores', JSON.stringify(userScores));
-
-//     let scoreElement = document.getElementById('totalScore');
-//     scoreElement.textContent = `Total Score: ${totalScore}`;
-//     displayScores();
-// }
 
 function displayScores() {
     const scoreTable = document.getElementById('scoreTable');
@@ -292,61 +234,25 @@ function displayScores() {
         <th>Total Score</th>
       </tr>
     `;
-  
+
     for (const userEmail in userScores) {
-      const userData = userScores[userEmail];
-      const newRow = scoreTable.insertRow(-1);
-      const emailCell = newRow.insertCell(0);
-      const usernameCell = newRow.insertCell(1);
-      const totalScoreCell = newRow.insertCell(2);
-  
-      emailCell.textContent = userEmail;
-      usernameCell.textContent = userData.username;
-  
-      // Display total score for each user
-      totalScoreCell.textContent = userData.totalScore !== null ? userData.totalScore : "Not taken yet";
+        const userData = userScores[userEmail];
+        const newRow = scoreTable.insertRow(-1);
+        const emailCell = newRow.insertCell(0);
+        const usernameCell = newRow.insertCell(1);
+        const totalScoreCell = newRow.insertCell(2);
+
+        emailCell.textContent = userEmail;
+        usernameCell.textContent = userData.username;
+        
+        // Display total score for each user
+        totalScoreCell.textContent = userData.totalScore;
     }
-  }
-  
+}
 
-// // Restore previous state if available
-// window.onload = function () {
-//     const storedUserAnswers = JSON.parse(sessionStorage.getItem("selectedOptions"));
-//     if (storedUserAnswers) {
-//         userAnswers = storedUserAnswers;
-//     }
 
-//     const storedQuestionIndex = sessionStorage.getItem("currentQuestionIndex");
-//     if (storedQuestionIndex) {
-//         currentQuestionIndex = parseInt(storedQuestionIndex, 10);
-//     }
 
-//     const storedUsername = localStorage.getItem("username");
-//     if (storedUsername) {
-//         usernameInput.value = storedUsername;
-//     }
-
-//     const storedUserEmail = localStorage.getItem("userEmail");
-//     if (storedUserEmail) {
-//         emailInput.value = storedUserEmail;
-//     }
-
-//     if (currentQuestionIndex >= 0 && currentQuestionIndex < quizData.length) {
-//         box.classList.remove("show");
-//         boxquiz.classList.add("show");
-//         showQuestion(currentQuestionIndex);
-//     }
-// };
-
-// // Save state in local storage and session storage on page unload
-// window.onunload = function () {
-//     sessionStorage.setItem("selectedOptions", JSON.stringify(selectedOptions));
-//     sessionStorage.setItem("currentQuestionIndex", currentQuestionIndex);
-//     localStorage.setItem("username", usernameInput.value);
-//     localStorage.setItem("userEmail", emailInput.value);
-// }
 const reloadButton = document.createElement('button');
 reloadButton.textContent = 'Reload';
 reloadButton.onclick = () => window.location.reload();
-
 document.getElementById('scorePage').appendChild(reloadButton);

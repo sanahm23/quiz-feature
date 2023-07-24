@@ -4,38 +4,29 @@
 <head>
   <title>Quiz App</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-
 </head>
 
 <body>
-
   <h1>QUIZ APP</h1>
 
   <div class="container">
     <div id="box">
       <h2>Login</h2>
-
       <label for="username"></label>
       <input type="text" id="username" placeholder="Username:">
-
       <label for="email"></label>
       <input type="email" id="email" placeholder="Email:">
       <button id="loginbtn">Start Quiz</button>
-
     </div>
 
     <div id="boxquiz">
-
+      <h3>Welcome, <span id="userDisplay"></span></h3>
       <h2 id="question"></h2>
       <form id="quizForm">
         <div id="options"></div>
       </form>
-
       <button id="prevB">PREV</button>
-
       <button id="btn" type="submit">SUBMIT</button>
-
-
     </div>
 
     <div id="scorePage">
@@ -45,12 +36,10 @@
         <tr>
           <th>UserEmail</th>
           <th>Username</th>
-          <!-- <th>User Email</th> -->
           <th>Score</th>
         </tr>
       </table>
     </div>
     <script src="script.js"></script>
 </body>
-
 </html>
