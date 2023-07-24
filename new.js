@@ -38,47 +38,215 @@ let quizData = [
     }
 ];
 
-function startQuiz() {
-    if (usernameInput.value === '' || email.value === '') {
-        alert('Please provide both username and email.');
-        return;
+
+
+
+function setCookie(name, value, days = 7) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+    const cookieName = name + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i];
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(cookieName) === 0) {
+            return cookie.substring(cookieName.length, cookie.length);
+        }
     }
-    if (usernameInput)
-        user.username = usernameInput.value;
+    return "";
+}
+
+
+
+
+// function setCurrentScreen(){
+//     if (getCookie('currentState')){
+//         console.log('quiz', 'score')
+//         if (getCurrentState() == 'quiz'){
+//             console.log('quiz')
+//             startQuiz()
+//         }else if (getCurrentState() == 'result') {
+//             console.log('result')
+//             quizOver()
+//         }
+//     }else{
+//         setCurrentState()
+//         console.log('login')
+//     }
+
+    
+// }
+// setCurrentScreen()
+
+  
+
+// function startQuiz() {
+//     if (usernameInput.value === '' || email.value === '') {
+//         alert('Please provide both username and email.');
+//         return;
+//     }
+//     if (usernameInput)
+//         user.username = usernameInput.value;
+//     user.email = email.value;
+//     userDisplay.textContent = usernameInput.value;
+
+
+//     const emailInput = email.value.trim();
+//     const emailPattern = /^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/;
+
+//     if (!emailPattern.test(emailInput)) {
+//         alert('Please enter a valid email');
+//         email.value = '';
+//         email.focus();
+//         return;
+//     }
+//     localStorage.setItem('user', JSON.stringify(user));
+//     const userEmail = user.email
+//     if (Object.keys(userScores).length > maxUserCount) {
+//         alert('max user login limit reached.')
+//         localStorage.clear();
+//         location.reload()
+//     }
+//     if (userScores.hasOwnProperty(userEmail) && userScores[userEmail].scores.length > 0) {
+//         document.getElementById('box').style.display = 'none';
+//         document.getElementById('boxquiz').style.display = 'none';
+//         document.getElementById('scorePage').style.display = 'block';
+//         displayScores();
+//     } else {
+
+//         document.getElementById('box').style.display = 'none';
+//         document.getElementById('boxquiz').style.display = 'block';
+//         document.getElementById('scorePage').style.display = 'none';
+//         showQuestion(currentQuestionIndex);
+//     }
+//     setCookie('username', user.username);
+//     setCookie('email', user.email);
+//     setCookie('currentState', 'quiz');
+//     setCurrentState('quiz');
+
+// }
+
+// function setCurrentState(states='login'){
+//     setCookie('currentState', states)
+// }
+
+// function getCurrentState(){
+//     return getCookie('currentState')
+// }
+
+// function setCurrentScreen() {
+//     const currentState = getCookie('currentState');
+  
+//     if (currentState === 'quiz') {
+//       // Load user data from cookies if available
+//       const username = getCookie('username');
+//       const email = getCookie('email');
+  
+//       if (username && email) {
+//         user.username = username;
+//         user.email = email;
+//         userDisplay.textContent = username;
+//         startQuiz();
+//       } else {
+//         // Redirect to login if user data is not available in cookies
+//         setCurrentState('login');
+//       }
+//     } else if (currentState === 'result') {
+//       displayScores();
+//     } else {
+//       setCurrentState('login');
+//     }
+//   }
+//   setCurrentScreen();
+// ... (Your existing code)
+
+function setCurrentState(states = 'login') {
+    setCookie('currentState', states);
+  }
+  
+  function getCurrentState() {
+    return getCookie('currentState');
+  }
+  
+  function setCurrentScreen() {
+    const currentState = getCurrentState();
+  
+    if (currentState === 'quiz') {
+      // Load user data from cookies if available
+      const username = getCookie('username');
+      const email = getCookie('email');
+  
+      if (username && email) {
+        user.username = username;
+        user.email = email;
+        userDisplay.textContent = username;
+        startQuiz();
+      } else {
+        // Redirect to login if user data is not available in cookies
+        setCurrentState('login');
+      }
+    } else if (currentState === 'result') {
+      displayScores();
+    } else {
+      setCurrentState('login');
+    }
+  }
+  
+  function startQuiz() {
+    if (usernameInput.value === '' || email.value === '') {
+      alert('Please provide both username and email.');
+      return;
+    }
+    if (usernameInput) user.username = usernameInput.value;
     user.email = email.value;
     userDisplay.textContent = usernameInput.value;
-
-
+  
     const emailInput = email.value.trim();
     const emailPattern = /^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/;
-
+  
     if (!emailPattern.test(emailInput)) {
-        alert('Please enter a valid email');
-        email.value = '';
-        email.focus();
-        return;
+      alert('Please enter a valid email');
+      email.value = '';
+      email.focus();
+      return;
     }
     localStorage.setItem('user', JSON.stringify(user));
-    const userEmail = user.email
+    const userEmail = user.email;
     if (Object.keys(userScores).length > maxUserCount) {
-        alert('max user login limit reached.')
-        localStorage.clear();
-        location.reload()
+      alert('max user login limit reached.');
+      localStorage.clear();
+      location.reload();
     }
     if (userScores.hasOwnProperty(userEmail) && userScores[userEmail].scores.length > 0) {
-        document.getElementById('box').style.display = 'none';
-        document.getElementById('boxquiz').style.display = 'none';
-        document.getElementById('scorePage').style.display = 'block';
-        displayScores();
+      document.getElementById('box').style.display = 'none';
+      document.getElementById('boxquiz').style.display = 'none';
+      document.getElementById('scorePage').style.display = 'block';
+      displayScores();
+      setCurrentState('result'); // Set currentState to 'result' after showing scores
     } else {
-
-        document.getElementById('box').style.display = 'none';
-        document.getElementById('boxquiz').style.display = 'block';
-        document.getElementById('scorePage').style.display = 'none';
-        showQuestion(currentQuestionIndex);
+      document.getElementById('box').style.display = 'none';
+      document.getElementById('boxquiz').style.display = 'block';
+      document.getElementById('scorePage').style.display = 'none';
+      showQuestion(currentQuestionIndex);
+      setCurrentState('quiz'); // Set currentState to 'quiz' after starting the quiz
     }
-
-}
+  }
+  
+  // ... (Your existing code)
+  
+  // Remove the setCurrentState('login') call from the startQuiz() function
+  // This will prevent resetting the currentState to 'login' after starting the quiz
+  
+  // ... (Your existing code)
+  
 
 function validateEmail(email) {
     var regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -195,7 +363,7 @@ function submitQuiz() {
 
     localStorage.setItem('userScores', JSON.stringify(userScores));
     displayScores();
-
+    setCurrentState('result');
 }
 quizForm.addEventListener("click", submitQuiz)
 function shuffleQuestions() {
@@ -242,6 +410,7 @@ function displayScores() {
         usernameCell.textContent = userData.username;
         totalScoreCell.textContent = userData.totalScore;
     }
+    setCurrentState('result');
 }
 
 const reloadButton = document.createElement('button');
